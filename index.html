@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Viora Studio Tools — PDF, удаление фона, скачивание видео</title>
+  <meta name="description" content="Бесплатные инструменты Viora Studio: работа с PDF, удаление фона с фото, скачивание видео. Без регистрации и без лимитов." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Libraries via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+  <!-- Ambient background glow -->
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <!-- Toast host -->
+  <div class="toast-host" id="toast-host" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Global drop overlay -->
+  <div class="drop-overlay" id="drop-overlay" aria-hidden="true">
+    <div class="drop-overlay-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <h3>Бросайте файл</h3>
+      <p>PDF — в PDF-инструменты · картинка — на удаление фона</p>
+    </div>
+  </div>
+
+  <!-- ====== HOME ====== -->
+  <section class="section section-home active" id="section-home">
+    <div class="home-inner">
+      <div class="brand-mark">VIORA · STUDIO</div>
+      <h1 class="title">Viora Studio Tools</h1>
+      <p class="subtitle"><span id="hero-subtitle">Бесплатно. Без регистрации. Без лимитов.</span></p>
+
+      <div class="cards">
+        <button class="card" data-tool="pdf">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="9" y1="13" x2="15" y2="13"/>
+              <line x1="9" y1="17" x2="15" y2="17"/>
+            </svg>
+          </div>
+          <div class="card-title">PDF</div>
+          <div class="card-desc">Конвертация, объединение, сжатие, AI-генерация</div>
+        </button>
+
+        <button class="card" data-tool="bg">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <circle cx="9" cy="9" r="2"/>
+              <path d="M21 15l-5-5L5 21"/>
+            </svg>
+          </div>
+          <div class="card-title">Удалить фон</div>
+          <div class="card-desc">PNG с прозрачным фоном за секунды</div>
+        </button>
+
+        <button class="card" data-tool="video">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v12"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <path d="M5 21h14"/>
+            </svg>
+          </div>
+          <div class="card-title">Скачать видео</div>
+          <div class="card-desc">YouTube, TikTok, VK, Twitter и ещё 30+ сайтов</div>
+        </button>
+
+        <button class="card" data-tool="images">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+              <path d="M3 16l5-5 4 4 3-3 6 6"/>
+              <circle cx="8" cy="9" r="1.5"/>
+            </svg>
+          </div>
+          <div class="card-title">Изображения</div>
+          <div class="card-desc">Сжатие, конвертация, обрезка/ресайз, OCR</div>
+        </button>
+
+        <button class="card" data-tool="qr">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"/>
+              <rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/>
+              <path d="M14 14h3v3h-3zM20 14h1M14 20h3M20 17v4"/>
+            </svg>
+          </div>
+          <div class="card-title">QR-код</div>
+          <div class="card-desc">Создать и отсканировать камерой или картинкой</div>
+        </button>
+
+        <button class="card" data-tool="rec">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="14" rx="2"/>
+              <path d="M8 22h8M12 18v4"/>
+              <circle cx="12" cy="11" r="3" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <div class="card-title">Запись</div>
+          <div class="card-desc">Запись экрана и извлечение аудио из видео</div>
+        </button>
+      </div>
+
+      <p class="home-foot">Все инструменты работают прямо в браузере. Ваши файлы не отправляются на сервер.</p>
+    </div>
+  </section>
+
+  <!-- ====== PDF TOOL ====== -->
+  <section class="section" id="section-pdf">
+    <div class="tool-wrap">
+      <button class="back-btn" data-back>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Назад
+      </button>
+
+      <header class="tool-head">
+        <h2>PDF инструменты</h2>
+        <p>Конвертация, объединение, разделение, сжатие и AI-генерация PDF. <span class="hl">Всё локально в браузере — файлы никуда не уходят.</span></p>
+      </header>
+
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-pdf-tab="pdf2img">PDF → JPG/PNG</button>
+        <button class="tab" data-pdf-tab="img2pdf">JPG/PNG → PDF</button>
+        <button class="tab" data-pdf-tab="merge">Объединить</button>
+        <button class="tab" data-pdf-tab="split">Разделить</button>
+        <button class="tab" data-pdf-tab="compress">Сжать</button>
+        <button class="tab" data-pdf-tab="ai">Viora AI</button>
+      </div>
+
+      <!-- PDF -> Images -->
+      <div class="pdf-pane active" data-pane="pdf2img">
+        <div class="dropzone" data-input="pdf2img-file">
+          <input type="file" id="pdf2img-file" accept="application/pdf" hidden />
+          <div class="dz-inner">
+            <div class="dz-icon">📄</div>
+            <div class="dz-text">Перетащите PDF или нажмите, чтобы выбрать</div>
+            <div class="dz-hint">.pdf — один файл</div>
+          </div>
+        </div>
+        <details class="more">
+          <summary>Дополнительно</summary>
+          <div class="more-body">
+            <label class="row">
+              <span>Формат</span>
+              <select id="pdf2img-format">
+                <option value="png">PNG</option>
+                <option value="jpg" selected>JPG</option>
+              </select>
+            </label>
+            <label class="row">
+              <span>Качество (масштаб)</span>
+              <select id="pdf2img-scale">
+                <option value="1">×1 (быстрее)</option>
+                <option value="2" selected>×2 (рекомендовано)</option>
+                <option value="3">×3 (максимум)</option>
+              </select>
+            </label>
+          </div>
+        </details>
+        <button class="btn-primary" id="pdf2img-run">Конвертировать</button>
+        <div class="result" id="pdf2img-result"></div>
+      </div>
+
+      <!-- Images -> PDF -->
+      <div class="pdf-pane" data-pane="img2pdf">
+        <div class="dropzone" data-input="img2pdf-file">
+          <input type="file" id="img2pdf-file" accept="image/jpeg,image/png" multiple hidden />
+          <div class="dz-inner">
+            <div class="dz-icon">🖼️</div>
+            <div class="dz-text">Перетащите картинки или нажмите, чтобы выбрать</div>
+            <div class="dz-hint">JPG, PNG — можно несколько</div>
+          </div>
+        </div>
+        <details class="more">
+          <summary>Дополнительно</summary>
+          <div class="more-body">
+            <label class="row">
+              <span>Размер страницы</span>
+              <select id="img2pdf-size">
+                <option value="auto" selected>По изображению</option>
+                <option value="a4">A4</option>
+                <option value="letter">Letter</option>
+              </select>
+            </label>
+          </div>
+        </details>
+        <button class="btn-primary" id="img2pdf-run">Создать PDF</button>
+        <div class="result" id="img2pdf-result"></div>
+      </div>
+
+      <!-- Merge -->
+      <div class="pdf-pane" data-pane="merge">
+        <div class="dropzone" data-input="merge-file">
+          <input type="file" id="merge-file" accept="application/pdf" multiple hidden />
+          <div class="dz-inner">
+            <div class="dz-icon">🧷</div>
+            <div class="dz-text">Перетащите несколько PDF</div>
+            <div class="dz-hint">порядок = порядок выбора</div>
+          </div>
+        </div>
+        <button class="btn-primary" id="merge-run">Объединить</button>
+        <div class="result" id="merge-result"></div>
+      </div>
+
+      <!-- Split -->
+      <div class="pdf-pane" data-pane="split">
+        <div class="dropzone" data-input="split-file">
+          <input type="file" id="split-file" accept="application/pdf" hidden />
+          <div class="dz-inner">
+            <div class="dz-icon">✂️</div>
+            <div class="dz-text">Перетащите PDF, чтобы разделить на страницы</div>
+            <div class="dz-hint">результат — ZIP-архив</div>
+          </div>
+        </div>
+        <button class="btn-primary" id="split-run">Разделить</button>
+        <div class="result" id="split-result"></div>
+      </div>
+
+      <!-- Compress -->
+      <div class="pdf-pane" data-pane="compress">
+        <div class="dropzone" data-input="compress-file">
+          <input type="file" id="compress-file" accept="application/pdf" hidden />
+          <div class="dz-inner">
+            <div class="dz-icon">🗜️</div>
+            <div class="dz-text">Перетащите PDF для сжатия</div>
+            <div class="dz-hint">страницы будут перерисованы в JPG нужного качества</div>
+          </div>
+        </div>
+        <details class="more">
+          <summary>Дополнительно</summary>
+          <div class="more-body">
+            <label class="row">
+              <span>Уровень сжатия</span>
+              <select id="compress-level">
+                <option value="low">Слабое (лучшее качество)</option>
+                <option value="medium" selected>Среднее (рекомендовано)</option>
+                <option value="high">Сильное (минимальный размер)</option>
+              </select>
+            </label>
+          </div>
+        </details>
+        <button class="btn-primary" id="compress-run">Сжать</button>
+        <div class="result" id="compress-result"></div>
+      </div>
+
+      <!-- AI -->
+      <div class="pdf-pane" data-pane="ai">
+        <label class="ai-label" for="ai-prompt">Опишите документ для генерации</label>
+        <textarea id="ai-prompt" rows="5" placeholder="Например: составь резюме junior frontend разработчика на русском"></textarea>
+        <details class="more">
+          <summary>Дополнительно</summary>
+          <div class="more-body">
+            <label class="row">
+              <span>Название файла</span>
+              <input type="text" id="ai-filename" placeholder="document" value="document" />
+            </label>
+            <label class="row">
+              <span>Размер страницы</span>
+              <select id="ai-pagesize">
+                <option value="a4" selected>A4</option>
+                <option value="letter">Letter</option>
+              </select>
+            </label>
+          </div>
+        </details>
+        <button class="btn-primary" id="ai-run">Сгенерировать PDF через Viora AI</button>
+        <div class="result" id="ai-result"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== BACKGROUND REMOVAL ====== -->
+  <section class="section" id="section-bg">
+    <div class="tool-wrap">
+      <button class="back-btn" data-back>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Назад
+      </button>
+
+      <header class="tool-head">
+        <h2>Удаление фона</h2>
+        <p>Загрузите фото — получите PNG с прозрачным фоном. <span class="hl">Работает на WebAssembly прямо в браузере, без сервера.</span></p>
+      </header>
+
+      <div class="dropzone" data-input="bg-file" id="bg-drop">
+        <input type="file" id="bg-file" accept="image/jpeg,image/png,image/webp" hidden />
+        <div class="dz-inner">
+          <div class="dz-icon">🪄</div>
+          <div class="dz-text">Перетащите картинку или нажмите для выбора</div>
+          <div class="dz-hint">JPG, PNG, WebP · без водяных знаков, без лимитов</div>
+        </div>
+      </div>
+
+      <details class="more">
+        <summary>Дополнительно</summary>
+        <div class="more-body">
+          <label class="row">
+            <span>Качество модели</span>
+            <select id="bg-quality">
+              <option value="small">Быстрое</option>
+              <option value="medium" selected>Среднее</option>
+              <option value="large">Максимальное</option>
+            </select>
+          </label>
+        </div>
+      </details>
+
+      <button class="btn-primary" id="bg-run" disabled>Удалить фон</button>
+      <div class="result" id="bg-result"></div>
+
+      <div class="compare" id="bg-compare" hidden>
+        <div class="compare-wrap">
+          <div class="compare-bg" id="bg-after-layer"></div>
+          <img class="compare-after" id="bg-after-img" alt="" />
+          <div class="compare-clip" id="bg-clip">
+            <img class="compare-before" id="bg-before-img" alt="" />
+          </div>
+          <input type="range" min="0" max="100" value="50" class="compare-slider" id="bg-slider" />
+          <div class="compare-handle" id="bg-handle" aria-hidden="true">
+            <span></span>
+          </div>
+          <div class="compare-label compare-label-left">До</div>
+          <div class="compare-label compare-label-right">После</div>
+        </div>
+        <button class="btn-primary btn-download" id="bg-download">Скачать PNG</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== VIDEO DOWNLOAD ====== -->
+  <section class="section" id="section-video">
+    <div class="tool-wrap">
+      <button class="back-btn" data-back>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Назад
+      </button>
+
+      <header class="tool-head">
+        <h2>Скачать видео</h2>
+        <p>Вставьте ссылку — получите файл. Скачивание идёт через ваш персональный yt-dlp на Zo Computer, поддерживается ~1000 площадок: TikTok, VK Видео, Instagram, Twitter/X, Twitch, Reddit, Rutube, SoundCloud и др.</p>
+        <p style="font-size:12px;color:var(--muted-2);margin-top:-8px;line-height:1.5;">
+          <strong style="color:var(--muted)">YouTube:</strong> требует ваши cookies из браузера (разово). Экспортируйте через расширение «Get cookies.txt» и положите файл в&nbsp;<code style="background:var(--surface-2);padding:2px 6px;border-radius:4px;font-size:11px;">/home/workspace/.viora-yt-cookies.txt</code> — после этого YouTube будет качаться без ошибок.
+        </p>
+      </header>
+
+      <div class="url-row">
+        <input type="url" id="video-url" placeholder="https://..." autocomplete="off" spellcheck="false" />
+      </div>
+
+      <details class="more">
+        <summary>Дополнительно</summary>
+        <div class="more-body">
+          <label class="row">
+            <span>Качество</span>
+            <select id="video-quality">
+              <option value="360">360p</option>
+              <option value="720" selected>720p</option>
+              <option value="1080">1080p</option>
+              <option value="max">Максимум</option>
+            </select>
+          </label>
+          <label class="row">
+            <span>Только аудио (MP3)</span>
+            <input type="checkbox" id="video-audio" />
+          </label>
+        </div>
+      </details>
+
+      <button class="btn-primary" id="video-run">Скачать</button>
+      <div class="result" id="video-result"></div>
+    </div>
+  </section>
+
+  <!-- ====== IMAGES TOOL ====== -->
+  <section class="section" id="section-images">
+    <div class="tool-wrap">
+      <div class="tool-head">
+        <button class="back-btn" data-back>← Назад</button>
+        <h2>Изображения</h2>
+        <p>Сжатие, конвертация форматов, обрезка с ресайзом и OCR — всё прямо в браузере, без загрузки на сервер.</p>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-img-tab="compress">Сжать</button>
+        <button class="tab" data-img-tab="convert">Конвертировать</button>
+        <button class="tab" data-img-tab="resize">Обрезать / ресайз</button>
+        <button class="tab" data-img-tab="ocr">OCR</button>
+      </div>
+
+      <!-- COMPRESS -->
+      <div class="tab-pane active" data-img-pane="compress">
+        <div class="dropzone" data-input="img-compress-file">
+          <input type="file" id="img-compress-file" accept="image/*" hidden />
+          <div class="dz-icon">⬇</div>
+          <div class="dz-title">Перетащите картинку или нажмите</div>
+          <div class="dz-hint">JPG · PNG · WebP · AVIF</div>
+        </div>
+        <div class="row">
+          <label class="field">
+            <span>Формат</span>
+            <select id="img-compress-format">
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/webp" selected>WebP</option>
+              <option value="image/avif">AVIF</option>
+              <option value="image/png">PNG</option>
+            </select>
+          </label>
+          <label class="field field-grow">
+            <span>Качество: <b id="img-compress-q-label">80%</b></span>
+            <input type="range" id="img-compress-q" min="10" max="100" value="80" />
+          </label>
+          <label class="field">
+            <span>Макс. сторона, px</span>
+            <input type="number" id="img-compress-max" min="100" max="8000" step="100" value="2400" />
+          </label>
+        </div>
+        <button class="btn-primary" id="img-compress-run">Сжать</button>
+        <div class="result" id="img-compress-result"></div>
+      </div>
+
+      <!-- CONVERT -->
+      <div class="tab-pane" data-img-pane="convert">
+        <div class="dropzone" data-input="img-convert-file">
+          <input type="file" id="img-convert-file" accept="image/*" multiple hidden />
+          <div class="dz-icon">⇄</div>
+          <div class="dz-title">Перетащите одну или несколько картинок</div>
+          <div class="dz-hint">Можно пачкой — всё придёт в ZIP</div>
+        </div>
+        <div class="row">
+          <label class="field field-grow">
+            <span>Целевой формат</span>
+            <select id="img-convert-format">
+              <option value="image/jpeg">JPEG (.jpg)</option>
+              <option value="image/png">PNG (.png)</option>
+              <option value="image/webp" selected>WebP (.webp)</option>
+              <option value="image/avif">AVIF (.avif)</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Качество: <b id="img-convert-q-label">92%</b></span>
+            <input type="range" id="img-convert-q" min="10" max="100" value="92" />
+          </label>
+        </div>
+        <button class="btn-primary" id="img-convert-run">Конвертировать</button>
+        <div class="result" id="img-convert-result"></div>
+      </div>
+
+      <!-- RESIZE / CROP -->
+      <div class="tab-pane" data-img-pane="resize">
+        <div class="dropzone" data-input="img-resize-file">
+          <input type="file" id="img-resize-file" accept="image/*" hidden />
+          <div class="dz-icon">⤡</div>
+          <div class="dz-title">Перетащите картинку или нажмите</div>
+          <div class="dz-hint">Затем выделите область или укажите размеры</div>
+        </div>
+
+        <div class="resize-stage" id="img-resize-stage" hidden>
+          <div class="resize-canvas-wrap" id="img-resize-wrap">
+            <canvas id="img-resize-canvas"></canvas>
+            <div class="crop-rect" id="img-resize-rect" hidden>
+              <div class="crop-handle" data-h="nw"></div>
+              <div class="crop-handle" data-h="ne"></div>
+              <div class="crop-handle" data-h="sw"></div>
+              <div class="crop-handle" data-h="se"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <label class="field">
+              <span>Ширина, px</span>
+              <input type="number" id="img-resize-w" min="1" step="1" />
+            </label>
+            <label class="field">
+              <span>Высота, px</span>
+              <input type="number" id="img-resize-h" min="1" step="1" />
+            </label>
+            <label class="checkbox">
+              <input type="checkbox" id="img-resize-lock" checked />
+              <span>Сохранять пропорции</span>
+            </label>
+            <button class="btn-ghost" id="img-resize-clear">Снять выделение</button>
+          </div>
+          <div class="row">
+            <label class="field">
+              <span>Формат вывода</span>
+              <select id="img-resize-format">
+                <option value="image/jpeg">JPEG</option>
+                <option value="image/png" selected>PNG</option>
+                <option value="image/webp">WebP</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Качество: <b id="img-resize-q-label">92%</b></span>
+              <input type="range" id="img-resize-q" min="10" max="100" value="92" />
+            </label>
+          </div>
+          <button class="btn-primary" id="img-resize-run">Сохранить</button>
+        </div>
+        <div class="result" id="img-resize-result"></div>
+      </div>
+
+      <!-- OCR -->
+      <div class="tab-pane" data-img-pane="ocr">
+        <div class="dropzone" data-input="img-ocr-file">
+          <input type="file" id="img-ocr-file" accept="image/*,application/pdf" hidden />
+          <div class="dz-icon">A</div>
+          <div class="dz-title">Перетащите картинку или PDF</div>
+          <div class="dz-hint">Распознавание текста через Tesseract.js — первая загрузка ~10 МБ моделей</div>
+        </div>
+        <div class="row">
+          <label class="field field-grow">
+            <span>Язык</span>
+            <select id="img-ocr-lang">
+              <option value="rus+eng" selected>Русский + English</option>
+              <option value="rus">Только русский</option>
+              <option value="eng">Только English</option>
+            </select>
+          </label>
+        </div>
+        <button class="btn-primary" id="img-ocr-run">Распознать</button>
+        <div class="result" id="img-ocr-result"></div>
+        <div class="ocr-output-wrap" id="img-ocr-output-wrap" hidden>
+          <textarea class="ocr-output" id="img-ocr-output" rows="14" placeholder="Распознанный текст появится здесь..."></textarea>
+          <div class="row">
+            <button class="btn-ghost" id="img-ocr-copy">📋 Скопировать</button>
+            <button class="btn-ghost" id="img-ocr-download">💾 Скачать .txt</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== QR TOOL ====== -->
+  <section class="section" id="section-qr">
+    <div class="tool-wrap">
+      <div class="tool-head">
+        <button class="back-btn" data-back>← Назад</button>
+        <h2>QR-код</h2>
+        <p>Создавайте QR-коды любого размера или сканируйте камерой / готовой картинкой.</p>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-qr-tab="gen">Создать</button>
+        <button class="tab" data-qr-tab="scan">Сканировать</button>
+      </div>
+
+      <!-- GEN -->
+      <div class="tab-pane active" data-qr-pane="gen">
+        <label class="field" style="margin-bottom: 16px;">
+          <span>Текст или ссылка</span>
+          <textarea id="qr-gen-text" rows="3" placeholder="https://example.com или любой текст"></textarea>
+        </label>
+
+        <div class="row">
+          <label class="field">
+            <span>Размер, px</span>
+            <input type="number" id="qr-gen-size" min="128" max="2048" step="32" value="512" />
+          </label>
+          <label class="field">
+            <span>Уровень коррекции</span>
+            <select id="qr-gen-ec">
+              <option value="L">L — 7%</option>
+              <option value="M" selected>M — 15%</option>
+              <option value="Q">Q — 25%</option>
+              <option value="H">H — 30%</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Цвет</span>
+            <input type="color" id="qr-gen-fg" value="#0a0a0a" />
+          </label>
+          <label class="field">
+            <span>Фон</span>
+            <input type="color" id="qr-gen-bg" value="#ffffff" />
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="qr-gen-transparent" />
+            <span>Прозрачный фон</span>
+          </label>
+        </div>
+
+        <button class="btn-primary" id="qr-gen-run">Создать</button>
+        <div class="result" id="qr-gen-result"></div>
+        <div class="qr-canvas-stage" id="qr-gen-stage" hidden>
+          <canvas id="qr-gen-canvas"></canvas>
+          <div class="row">
+            <button class="btn-ghost" id="qr-gen-dl-png">⬇ PNG</button>
+            <button class="btn-ghost" id="qr-gen-dl-svg">⬇ SVG</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCAN -->
+      <div class="tab-pane" data-qr-pane="scan">
+        <div class="qr-scan-grid">
+          <div class="qr-scan-cam">
+            <video id="qr-scan-video" playsinline muted></video>
+            <canvas id="qr-scan-overlay"></canvas>
+            <div class="qr-scan-aim" id="qr-scan-aim"></div>
+          </div>
+          <div class="qr-scan-side">
+            <button class="btn-primary" id="qr-scan-start">📷 Включить камеру</button>
+            <button class="btn-ghost" id="qr-scan-stop" hidden>⏹ Остановить</button>
+            <div class="qr-scan-or">— или —</div>
+            <div class="dropzone dropzone-sm" data-input="qr-scan-file">
+              <input type="file" id="qr-scan-file" accept="image/*" hidden />
+              <div class="dz-title">Загрузить картинку с QR</div>
+            </div>
+          </div>
+        </div>
+        <div class="result" id="qr-scan-result"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== RECORDER TOOL ====== -->
+  <section class="section" id="section-rec">
+    <div class="tool-wrap">
+      <div class="tool-head">
+        <button class="back-btn" data-back>← Назад</button>
+        <h2>Запись</h2>
+        <p>Запись экрана со звуком или извлечение аудио-дорожки из локального видео.</p>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-rec-tab="screen">Запись экрана</button>
+        <button class="tab" data-rec-tab="audio">Аудио из видео</button>
+      </div>
+
+      <!-- SCREEN -->
+      <div class="tab-pane active" data-rec-pane="screen">
+        <div class="row">
+          <label class="checkbox">
+            <input type="checkbox" id="rec-screen-mic" />
+            <span>Микрофон</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" id="rec-screen-sysaudio" checked />
+            <span>Системный звук</span>
+          </label>
+          <label class="field">
+            <span>Формат</span>
+            <select id="rec-screen-format">
+              <option value="webm">WebM (лучше совместимость)</option>
+              <option value="mp4">MP4 (если поддерживается)</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="rec-status" id="rec-screen-status">
+          <span class="rec-dot" id="rec-screen-dot"></span>
+          <span id="rec-screen-time">00:00</span>
+        </div>
+
+        <div class="row">
+          <button class="btn-primary" id="rec-screen-start">⏺ Начать запись</button>
+          <button class="btn-ghost" id="rec-screen-stop" hidden>⏹ Остановить</button>
+        </div>
+
+        <div class="result" id="rec-screen-result"></div>
+        <video id="rec-screen-preview" controls hidden style="width:100%; margin-top:16px; border-radius:12px;"></video>
+      </div>
+
+      <!-- AUDIO FROM VIDEO -->
+      <div class="tab-pane" data-rec-pane="audio">
+        <div class="dropzone" data-input="rec-audio-file">
+          <input type="file" id="rec-audio-file" accept="video/*" hidden />
+          <div class="dz-icon">♫</div>
+          <div class="dz-title">Перетащите видео-файл</div>
+          <div class="dz-hint">MP4, MOV, MKV, WebM... извлечём дорожку</div>
+        </div>
+        <div class="row">
+          <label class="field">
+            <span>Формат вывода</span>
+            <select id="rec-audio-format">
+              <option value="mp3" selected>MP3 (192 kbps)</option>
+              <option value="wav">WAV (без сжатия)</option>
+              <option value="aac">AAC (.m4a)</option>
+              <option value="opus">OGG Opus</option>
+            </select>
+          </label>
+        </div>
+        <button class="btn-primary" id="rec-audio-run">Извлечь</button>
+        <div class="result" id="rec-audio-result"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Viora Studio neon pill -->
+  <a href="https://t.me/VioraStudio" target="_blank" rel="noopener noreferrer" class="viora-pill" aria-label="Viora Studio в Telegram">
+    <span class="pill-dot"></span>
+    Viora Studio
+  </a>
+
+  <!-- App script (deferred at end) -->
+  <script type="module" src="script.js"></script>
+</body>
+</html>
